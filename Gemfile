@@ -1,9 +1,16 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.0.0.beta3'
-gem "rspec-rails", ">= 2.0.0.beta.8"
 gem 'mongoid', :git => 'git://github.com/durran/mongoid.git'
 gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
+gem 'simple_form'
+gem 'haml'
+gem 'rails3-generators'
+
+group :test do
+  gem "rspec-rails", ">= 2.0.0.beta.8"
+end
+
 
 
 # Bundle edge Rails instead:

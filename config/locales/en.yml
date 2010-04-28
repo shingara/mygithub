@@ -3,3 +3,9 @@
 
 en:
   hello: "Hello world"
+  views:
+    welcome:
+      index:
+        hello: Welcome All here
+        login: Login
+        register: Register
