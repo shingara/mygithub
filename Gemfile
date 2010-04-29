@@ -6,6 +6,7 @@ gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
 gem 'simple_form'
 gem 'haml'
 gem 'rails3-generators'
+gem 'inherited_resources', '1.1.2'
 
 group :test do
   gem "rspec-rails", ">= 2.0.0.beta.8"

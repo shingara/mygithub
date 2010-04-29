@@ -1,5 +1,5 @@
-- form_for @user do |f|
-  = f.error_messages
-
-  .actions
-    = f.submit 'Save'
+= simple_form_for @user do |f|
+  = f.input :login
+  = f.input :password
+  = f.input :github_login
+  = f.button :submit
