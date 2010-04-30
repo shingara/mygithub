@@ -9,3 +9,4 @@ en:
         hello: Welcome All here
         login: Login
         register: Register
+        logout: Logout
