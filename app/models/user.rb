@@ -1,12 +1,14 @@
 class User
   include Mongoid::Document
 
-  field :github_login, :type => String
-  field :login, :type => String
+  field :github_login, :type => String, :index => true
+  field :login, :type => String, :index => true
 
   validates_presence_of :login
   validates_presence_of :github_login
   validate :need_valid_github_login
+  validates_uniqueness_of :login
+  validates_uniqueness_of :github_login
 
   devise :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
 

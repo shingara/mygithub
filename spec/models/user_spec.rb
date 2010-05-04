@@ -25,6 +25,16 @@ describe User do
       Octopussy.should_receive(:user).with('hello').and_raise(Crack::ParseError)
       Factory.build(:user, :github_login => 'hello').should_not be_valid
     end
+
+    it 'should not valid if login already use' do
+      Factory.create(:user, :login => 'hello')
+      Factory.build(:user, :login => 'hello').should_not be_valid
+    end
+
+    it 'should not valid if github_login already use' do
+      Factory.create(:user, :github_login => 'hello_github')
+      Factory.build(:user, :github_login => 'hello_github').should_not be_valid
+    end
   end
 
 end

@@ -24,6 +24,9 @@ Rspec.configure do |config|
   config.before(:each) do
     Octopussy.stub!(:user).and_return({:name => 'ok'})
   end
+  config.before(:all) do
+    Mongoid.master.collections.each(&:drop)
+  end
 end
 
 require 'factories'
