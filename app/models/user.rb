@@ -19,6 +19,12 @@ class User
   before_create :fetch_following
   before_create :fetch_repo_watched
 
+  def update_github_data!
+    fetch_following
+    fetch_repo_watched
+    save!
+  end
+
   private
 
   def need_valid_github_login
