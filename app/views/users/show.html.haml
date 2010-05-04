@@ -1,4 +1,10 @@
+%dl
+  %dt Name:
+  %dd= @user.login
+  %dt Github login
+  %dd= link_to(@user.github_login, "http://github.com/#{@user.github_login}")
 
-= link_to 'Edit', edit_user_path(@user)
-\|
+- if can?(:update, @user)
+  = link_to 'Edit', edit_user_path(@user)
+  \|
 = link_to 'Back', users_path

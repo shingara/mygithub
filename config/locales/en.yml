@@ -7,6 +7,8 @@ en:
     welcome:
       index:
         hello: Welcome All here
-        login: Login
-        register: Register
-        logout: Logout
+        list_user: All users
+    layout:
+      login: Login
+      register: Register
+      logout: Logout

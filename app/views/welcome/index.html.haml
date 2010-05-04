@@ -1,12 +1,3 @@
-#userbox
-  %ul
-    - if user_signed_in?
-      %li
-        Welcome abord
-        = current_user.login
-      %li= link_to(t('views.welcome.index.logout'), destroy_user_session_url)
-    - else
-      %li=link_to(t('views.welcome.index.login'), new_user_session_url)
-      %li=link_to(t('views.welcome.index.register'), new_user_url)
 #content
-  =t('views.welcome.index.hello')
+  = t('views.welcome.index.hello')
+  = link_to(t('views.welcome.index.list_user'), users_url)
