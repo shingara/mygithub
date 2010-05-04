@@ -10,6 +10,9 @@ describe User do
   it { User.fields.keys.should be_include('repo_watched')}
   it { User.fields['repo_watched'].type.should == Array}
 
+  it { User.fields.keys.should be_include('atom_feeds')}
+  it { User.fields['atom_feeds'].type.should == Array}
+
   it { User.fields.keys.should be_include('login')}
   it { User.fields['login'].type.should == String}
   it 'should validate factory_girl' do
@@ -55,6 +58,15 @@ describe User do
       Octopussy.should_receive(:watched).with('shingara2').and_return(['http://github.com/durran/mongoid', 'http://github.com/rails/rails'])
       user = Factory(:user, :github_login => 'shingara2')
       user.repo_watched.should == ['http://github.com/durran/mongoid', 'http://github.com/rails/rails']
+    end
+  end
+
+  describe '#before_save' do
+    it 'should update all atom_feeds with all user followers and repo_watched' do
+      Octopussy.should_receive(:following).with('shingara3').and_return(['antires', 'dhh'])
+      Octopussy.should_receive(:watched).with('shingara3').and_return([{'url' => 'http://github.com/durran/mongoid'}, {'url' => 'http://github.com/rails/rails'}])
+      user = Factory(:user, :github_login => 'shingara3')
+      user.atom_feeds.should == ['http://github.com/antires.atom', 'http://github.com/dhh.atom', 'http://github.com/durran/mongoid/commits/master.atom', 'http://github.com/rails/rails/commits/master.atom']
     end
   end
 

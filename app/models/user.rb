@@ -5,6 +5,7 @@ class User
   field :login, :type => String, :index => true
   field :following, :type => Array
   field :repo_watched, :type => Array
+  field :atom_feeds, :type => Array
 
   validates_presence_of :login
   validates_presence_of :github_login
@@ -18,6 +19,8 @@ class User
 
   before_create :fetch_following
   before_create :fetch_repo_watched
+
+  before_save :update_atom_feeds
 
   def update_github_data!
     fetch_following
@@ -39,6 +42,16 @@ class User
 
   def fetch_repo_watched
     self.repo_watched = Octopussy.watched(github_login)
+  end
+
+  def update_atom_feeds
+    self.atom_feeds = []
+    following.each do |f|
+      self.atom_feeds << "http://github.com/#{f}.atom"
+    end
+    repo_watched.each do |r|
+      self.atom_feeds << "#{r['url']}/commits/master.atom"
+    end
   end
 
 end
