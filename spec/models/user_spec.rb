@@ -20,5 +20,11 @@ describe User do
     it 'should required email' do
       Factory.build(:user, :email => '').should_not be_valid
     end
+
+    it 'should require valid github login' do
+      Octopussy.should_receive(:user).with('hello').and_raise(Crack::ParseError)
+      Factory.build(:user, :github_login => 'hello').should_not be_valid
+    end
   end
+
 end

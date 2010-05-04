@@ -21,6 +21,9 @@ Rspec.configure do |config|
   # If you'd prefer not to run each of your examples within a transaction,
   # uncomment the following line.
   # config.use_transactional_examples = false
+  config.before(:each) do
+    Octopussy.stub!(:user).and_return({:name => 'ok'})
+  end
 end
 
 require 'factories'
