@@ -3,6 +3,16 @@
   %dd= @user.login
   %dt Github login
   %dd= link_to(@user.github_login, "http://github.com/#{@user.github_login}")
+  %dt Following coder
+  %dd
+    %ul
+      - @user.following.each do |following|
+        %li=link_to(following, "http://github.com/#{following}")
+  %dt Repository watch
+  %dd
+    %ul
+      - @user.repo_watched.each do |repo|
+        %li=link_to("#{repo['owner']}/#{repo['name']}", repo['url'])
 
 - if can?(:update, @user)
   = link_to 'Edit', edit_user_path(@user)
