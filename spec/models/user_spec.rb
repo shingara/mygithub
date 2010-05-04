@@ -8,4 +8,17 @@ describe User do
   it 'should validate factory_girl' do
     Factory.build(:user).should be_valid
   end
+
+  describe 'validation' do
+    it 'should required login' do
+      Factory.build(:user, :login => '').should_not be_valid
+    end
+
+    it 'should required github_login' do
+      Factory.build(:user, :github_login => '', :login => 'hello').should_not be_valid
+    end
+    it 'should required email' do
+      Factory.build(:user, :email => '').should_not be_valid
+    end
+  end
 end
