@@ -7,6 +7,9 @@ describe User do
   it { User.fields.keys.should be_include('following')}
   it { User.fields['following'].type.should == Array}
 
+  it { User.fields.keys.should be_include('repo_watched')}
+  it { User.fields['repo_watched'].type.should == Array}
+
   it { User.fields.keys.should be_include('login')}
   it { User.fields['login'].type.should == String}
   it 'should validate factory_girl' do
@@ -46,6 +49,12 @@ describe User do
       Octopussy.should_receive(:following).with('shingara').and_return(['antires', 'dhh'])
       user = Factory(:user, :github_login => 'shingara')
       user.following.should == ['antires', 'dhh']
+    end
+
+    it "should fetch all repo_watched's user" do
+      Octopussy.should_receive(:watched).with('shingara2').and_return(['http://github.com/durran/mongoid', 'http://github.com/rails/rails'])
+      user = Factory(:user, :github_login => 'shingara2')
+      user.repo_watched.should == ['http://github.com/durran/mongoid', 'http://github.com/rails/rails']
     end
   end
 

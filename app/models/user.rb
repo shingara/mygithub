@@ -4,6 +4,7 @@ class User
   field :github_login, :type => String, :index => true
   field :login, :type => String, :index => true
   field :following, :type => Array
+  field :repo_watched, :type => Array
 
   validates_presence_of :login
   validates_presence_of :github_login
@@ -16,6 +17,7 @@ class User
   devise :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
 
   before_create :fetch_following
+  before_create :fetch_repo_watched
 
   private
 
@@ -27,6 +29,10 @@ class User
 
   def fetch_following
     self.following = Octopussy.following(github_login)
+  end
+
+  def fetch_repo_watched
+    self.repo_watched = Octopussy.watched(github_login)
   end
 
 end

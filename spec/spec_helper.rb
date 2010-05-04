@@ -24,6 +24,7 @@ Rspec.configure do |config|
   config.before(:each) do
     Octopussy.stub!(:user).and_return({:name => 'ok'})
     Octopussy.stub!(:following).and_return(['foo', 'bar'])
+    Octopussy.stub!(:watched).and_return(['foo', 'bar'])
   end
   config.before(:all) do
     Mongoid.master.collections.each(&:drop)
