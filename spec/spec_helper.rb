@@ -23,6 +23,7 @@ Rspec.configure do |config|
   # config.use_transactional_examples = false
   config.before(:each) do
     Octopussy.stub!(:user).and_return({:name => 'ok'})
+    Octopussy.stub!(:following).and_return(['foo', 'bar'])
   end
   config.before(:all) do
     Mongoid.master.collections.each(&:drop)

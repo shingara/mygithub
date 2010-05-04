@@ -3,6 +3,10 @@ require 'spec_helper'
 describe User do
   it { User.fields.keys.should be_include('github_login')}
   it { User.fields['github_login'].type.should == String}
+
+  it { User.fields.keys.should be_include('following')}
+  it { User.fields['following'].type.should == Array}
+
   it { User.fields.keys.should be_include('login')}
   it { User.fields['login'].type.should == String}
   it 'should validate factory_girl' do
@@ -34,6 +38,14 @@ describe User do
     it 'should not valid if github_login already use' do
       Factory.create(:user, :github_login => 'hello_github')
       Factory.build(:user, :github_login => 'hello_github').should_not be_valid
+    end
+  end
+
+  describe '#before_create' do
+    it "should fetch all following's user" do
+      Octopussy.should_receive(:following).with('shingara').and_return(['antires', 'dhh'])
+      user = Factory(:user, :github_login => 'shingara')
+      user.following.should == ['antires', 'dhh']
     end
   end
 
