@@ -6,4 +6,7 @@ class Repository
 
   validates_presence_of :name
   validates_presence_of :owner
+  validates_presence_of :url
+  validates_uniqueness_of :url
+  index :url, :unique => true
 end

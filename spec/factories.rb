@@ -11,3 +11,7 @@ Factory.define :repository do |r|
   r.name { /\w+/.gen }
   r.url {|u| "http://github.com/#{u.owner}/#{u.name}" }
 end
+
+Factory.define :coder do |c|
+  c.login { /\w+/.gen }
+end

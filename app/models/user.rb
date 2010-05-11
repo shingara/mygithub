@@ -28,6 +28,14 @@ class User
     save!
   end
 
+  def coders
+    following.map{|f| Coder.where(:login => f).limit(1).first}
+  end
+
+  def repositories
+    repo_watched.map{|f| Repository.where(:url => f['url']).limit(1).first}
+  end
+
   private
 
   def need_valid_github_login
@@ -38,10 +46,19 @@ class User
 
   def fetch_following
     self.following = Octopussy.following(github_login)
+    self.following.each {|f|
+      Coder.find_or_create_by(:login => f)
+    }
   end
 
   def fetch_repo_watched
     self.repo_watched = Octopussy.watched(github_login)
+    self.repo_watched.each do |repo|
+      re = Repository.find_or_initialize_by(:url => repo['url'])
+      re.owner = repo['owner']
+      re.name = repo['name']
+      re.save
+    end
   end
 
   def update_atom_feeds

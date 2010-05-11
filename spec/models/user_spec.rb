@@ -50,14 +50,22 @@ describe User do
   describe '#before_create' do
     it "should fetch all following's user" do
       Octopussy.should_receive(:following).with('shingara').and_return(['antires', 'dhh'])
-      user = Factory(:user, :github_login => 'shingara')
-      user.following.should == ['antires', 'dhh']
+      expect do
+        user = Factory(:user, :github_login => 'shingara')
+        user.following.should == ['antires', 'dhh']
+        user.coders.map(&:login).sort.should == ['antires', 'dhh']
+      end.to change(Coder, :count).by(2)
     end
 
     it "should fetch all repo_watched's user" do
-      Octopussy.should_receive(:watched).with('shingara2').and_return(['http://github.com/durran/mongoid', 'http://github.com/rails/rails'])
-      user = Factory(:user, :github_login => 'shingara2')
-      user.repo_watched.should == ['http://github.com/durran/mongoid', 'http://github.com/rails/rails']
+      repos = [{"description"=>"Merb Core: All you need. None you don't.", "has_downloads"=>true, "has_issues"=>true, "homepage"=>"http://www.merbivore.com", "forks"=>50, "watchers"=>538, "fork"=>false, "has_wiki"=>true, "url"=>"http://github.com/wycats/merb-core", "private"=>false, "name"=>"merb-core", "owner"=>"wycats", "open_issues"=>0},
+                                                                      {"description"=>"Merb More: The Full Stack. Take what you need; leave what you don't.", "has_downloads"=>true, "has_issues"=>true, "homepage"=>"http://www.merbivore.com", "forks"=>30, "watchers"=>279, "fork"=>false, "has_wiki"=>true, "url"=>"http://github.com/wycats/merb-more", "private"=>false, "name"=>"merb-more", "owner"=>"wycats", "open_issues"=>0}]
+      Octopussy.should_receive(:watched).with('shingara2').and_return(repos)
+      expect do
+        user = Factory(:user, :github_login => 'shingara2')
+        user.repo_watched.should == repos
+        user.repositories.map(&:url).should == ['http://github.com/wycats/merb-core', 'http://github.com/wycats/merb-more']
+      end.to change(Repository, :count)
     end
   end
 
