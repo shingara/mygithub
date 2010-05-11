@@ -78,4 +78,17 @@ describe User do
     end
   end
 
+  describe '#after_save' do
+    include WebMock
+
+    it 'should post subscribe to pushme about all coders watch by user' do
+      Octopussy.should_receive(:following).with('shingara').and_return(['antires', 'dhh'])
+      Octopussy.should_receive(:watched).with('shingara').and_return([])
+      user = Factory(:user, :github_login => 'shingara')
+      WebMock.should have_requested(:post, 'http://localhost:3001').with(:push => {:feed_url => 'http://github.com/antires.atom', :feed_type => 'atom', :pusher => {:push_type => 'post_http', :options => {:url => 'http://'}}})
+      WebMock.should have_requested(:post, 'http://localhost:3001').with(:push => {:feed_url => 'http://github.com/dhh.atom', :feed_type => 'atom', :pusher => {:push_type => 'post_http', :options => {:url => 'http://'}}})
+    end
+    it 'should post subscribe to pushme about all repositories watch by user'
+  end
+
 end

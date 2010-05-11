@@ -9,11 +9,13 @@ gem 'rails3-generators'
 gem 'inherited_resources', '1.1.2'
 gem 'cancan'
 gem 'octopussy'
+gem 'rest-client', :require => 'rest_client'
 
 group :test do
   gem "rspec-rails", ">= 2.0.0.beta.8"
   gem 'factory_girl', :git => 'git://github.com/thoughtbot/factory_girl.git', :branch => 'rails3'
   gem 'randexp'
+  gem 'webmock'
 end
 
 

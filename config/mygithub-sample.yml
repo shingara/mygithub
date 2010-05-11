@@ -1,0 +1,6 @@
+development:
+  pushme_host: http://localhost:3001/
+production:
+  pushme_host: http://pushme.com/
+test:
+  pushme_host: http://localhost:3001/

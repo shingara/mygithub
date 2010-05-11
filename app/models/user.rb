@@ -23,6 +23,7 @@ class User
   before_create :fetch_repo_watched
 
   before_save :update_atom_feeds
+  after_save :push_atom_feeds
 
   def update_github_data!
     fetch_following
@@ -70,6 +71,13 @@ class User
     end
     repo_watched.each do |r|
       self.atom_feeds << "#{r['url']}/commits/master.atom"
+    end
+  end
+
+  def push_atom_feeds
+    self.atom_feeds.each do |atom|
+      p atom
+      RestClient.post(AppConfig.pushme_host, :push => {:feed_url => atom, :feed_type => 'atom', :pusher => {:push_type => 'post_http', :options => {:url => "#{AppConfig.host}/atom/callback"}}})
     end
   end
 
