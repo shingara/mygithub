@@ -19,10 +19,10 @@ class User
 
   devise :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
 
-  before_create :fetch_following
-  before_create :fetch_repo_watched
-
+  before_save :fetch_following
+  before_save :fetch_repo_watched
   before_save :update_atom_feeds
+
   after_save :push_atom_feeds
 
   def update_github_data!
@@ -76,8 +76,7 @@ class User
 
   def push_atom_feeds
     self.atom_feeds.each do |atom|
-      p atom
-      RestClient.post(AppConfig.pushme_host, :push => {:feed_url => atom, :feed_type => 'atom', :pusher => {:push_type => 'post_http', :options => {:url => "#{AppConfig.host}/atom/callback"}}})
+      RestClient.post(AppConfig.pushme_host, :push => {:feed_url => atom, :feed_type => 'atom', :pusher => {:push_type => 'post_http', :options => {:url => File.join(AppConfig.host, '/atom/callback')}}})
     end
   end
 
