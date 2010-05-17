@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.0.beta3'
+gem 'rails', :git => 'git://github.com/rails/rails.git'
 gem 'mongoid', :git => 'git://github.com/durran/mongoid.git'
 gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
 gem 'simple_form'
