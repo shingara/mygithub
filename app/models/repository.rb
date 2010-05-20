@@ -21,7 +21,7 @@ class Repository
       Entry.create(:content => entry.inspect)
       if entry.id =~ /Grit::Commit\/(.+)/
         events << CommitEvent.create(:commit_id => $1,
-                                     :published_at => entry.updated,
+                                     :published_at => entry.published,
                                      :message => entry.title,
                                      :content => entry.content)
         save!
