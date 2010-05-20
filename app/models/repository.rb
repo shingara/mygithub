@@ -16,5 +16,15 @@ class Repository
 
   def parse_entries(entries)
     #tag:github.com,2008:Grit::Commit/59c7b0c23a58b2499c911d8907ecd936b73b0172
+    entries.each do |entry|
+      Rails.info(entry.id)
+      if entry.id =~ /Grit::Commit\/(.+)/
+        events << CommitEvent.create(:commit_id => $1,
+                                     :published_at => entry.updated,
+                                     :message => entry.title,
+                                     :content => entry.content)
+        save!
+      end
+    end
   end
 end

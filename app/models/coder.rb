@@ -13,6 +13,7 @@ class Coder
 
   def parse_entries(entries)
     entries.each do |entry|
+      Rails.info(entry.id)
       if entry.id =~ /PushEvent:(\d+)/
         events << PushEvent.create(:github_id => $1,
                                    :published_at => entry.published,
