@@ -9,7 +9,22 @@ class Coder
   index :login#, :unique => true
   index :atom_url#, :unique => true
 
-  def parse_entries(entries)
+  has_many_related :events
 
+  def parse_entries(entries)
+    entries.each do |entry|
+      if entry.id =~ /PushEvent:(\d+)/
+        events << PushEvent.create(:github_id => $1,
+                                   :published_at => entry.published,
+                                   :title => entry.title)
+        save!
+      end
+
+    end
+    #PushEvent
+    #WatchEvent
+    #CommitCommentEvent
+    #CreateEvent
+    #ForkEvent
   end
 end

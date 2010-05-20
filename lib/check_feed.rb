@@ -7,9 +7,11 @@ Superfeedr::Client.connect(AppConfig.superfeedr['login'], AppConfig.superfeedr['
     entries = Superfeedr::Entry.parse(evt)
 
     if coder = Coder.where(:atom_url => status.feed).limit(1).first
+      Rails.logger.info("new entries in feed : #{status.feed}")
       coder.parse_entries(entries)
     end
     if repo = Repository.where(:atom_url => status.feed).limit(1).first
+      Rails.logger.info("new entries in feed : #{status.feed}")
       repo.parse_entries(entries)
     end
   end

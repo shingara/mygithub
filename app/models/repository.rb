@@ -15,6 +15,6 @@ class Repository
   index :atom_url#, :unique => true
 
   def parse_entries(entries)
-
+    #tag:github.com,2008:Grit::Commit/59c7b0c23a58b2499c911d8907ecd936b73b0172
   end
 end
