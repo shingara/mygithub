@@ -1,6 +1,12 @@
 development:
-  pushme_host: http://localhost:3001/
+  superfeedr:
+    login: login@superfeedr.com
+    password: pass
 production:
-  pushme_host: http://pushme.com/
+  superfeedr:
+    login: login@superfeedr.com
+    password: pass
 test:
-  pushme_host: http://localhost:3001/
+  superfeedr:
+    login: login@superfeedr.com
+    password: pass

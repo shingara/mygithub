@@ -59,7 +59,7 @@ describe User do
 
     it "should fetch all repo_watched's user" do
       repos = [{"description"=>"Merb Core: All you need. None you don't.", "has_downloads"=>true, "has_issues"=>true, "homepage"=>"http://www.merbivore.com", "forks"=>50, "watchers"=>538, "fork"=>false, "has_wiki"=>true, "url"=>"http://github.com/wycats/merb-core", "private"=>false, "name"=>"merb-core", "owner"=>"wycats", "open_issues"=>0},
-                                                                      {"description"=>"Merb More: The Full Stack. Take what you need; leave what you don't.", "has_downloads"=>true, "has_issues"=>true, "homepage"=>"http://www.merbivore.com", "forks"=>30, "watchers"=>279, "fork"=>false, "has_wiki"=>true, "url"=>"http://github.com/wycats/merb-more", "private"=>false, "name"=>"merb-more", "owner"=>"wycats", "open_issues"=>0}]
+        {"description"=>"Merb More: The Full Stack. Take what you need; leave what you don't.", "has_downloads"=>true, "has_issues"=>true, "homepage"=>"http://www.merbivore.com", "forks"=>30, "watchers"=>279, "fork"=>false, "has_wiki"=>true, "url"=>"http://github.com/wycats/merb-more", "private"=>false, "name"=>"merb-more", "owner"=>"wycats", "open_issues"=>0}]
       Octopussy.should_receive(:watched).with('shingara2').and_return(repos)
       expect do
         user = Factory(:user, :github_login => 'shingara2')
@@ -79,18 +79,24 @@ describe User do
   end
 
   describe '#after_save' do
-    include WebMock
 
-    it 'should post subscribe to pushme about all coders watch by user' do
-      Octopussy.should_receive(:following).with('shingara').and_return(['antires', 'dhh'])
-      Octopussy.should_receive(:watched).with('shingara').and_return([])
+    it 'should subscribe to superfeedr about all repository watch by user' do
+      Octopussy.should_receive(:following).with('shingara').and_return([])
+      Octopussy.should_receive(:watched).with('shingara').and_return([{'url' => 'http://github.com/durran/mongoid'}, {'url' => 'http://github.com/rails/rails'}])
+      Mygithub::Application::SUBSCRIBE_CHANNEL.should_receive(:push).with('http://github.com/durran/mongoid/commits/master.atom')
+      Mygithub::Application::SUBSCRIBE_CHANNEL.should_receive(:push).with('http://github.com/rails/rails/commits/master.atom')
+
       user = Factory(:user, :github_login => 'shingara')
-      WebMock.should have_requested(:post, 'http://localhost:3001').twice
-      #  We can't try with 2 different options :(
-      #  with(:push => {:feed_url => 'http://github.com/antires.atom', :feed_type => 'atom', :pusher => {:push_type => 'post_http', :options => {:url => 'http://'}}})
-      #  WebMock.should have_requested(:post, 'http://localhost:3001').with(:push => {:feed_url => 'http://github.com/dhh.atom', :feed_type => 'atom', :pusher => {:push_type => 'post_http', :options => {:url => 'http://'}}})
     end
-    it 'should post subscribe to pushme about all repositories watch by user'
+
+    it 'should subscribe to superfeedr about all coder watch by user' do
+      Octopussy.should_receive(:following).with('shingara2').and_return(['antires', 'dhh'])
+      Octopussy.should_receive(:watched).with('shingara2').and_return([])
+      Mygithub::Application::SUBSCRIBE_CHANNEL.should_receive(:push).with('http://github.com/antires.atom')
+      Mygithub::Application::SUBSCRIBE_CHANNEL.should_receive(:push).with('http://github.com/dhh.atom')
+
+      user = Factory(:user, :github_login => 'shingara2')
+    end
   end
 
 end

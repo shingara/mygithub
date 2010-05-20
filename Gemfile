@@ -9,7 +9,10 @@ gem 'rails3-generators'
 gem 'inherited_resources', '1.1.2'
 gem 'cancan'
 gem 'octopussy'
-gem 'rest-client', :require => 'rest_client'
+gem 'shingara-blather', :require => 'blather'
+gem 'superfeedr-rb', :git => 'git://github.com/shingara/superfeedr-rb.git'
+gem 'bson_ext'
+gem 'thin'
 
 group :test do
   gem "rspec-rails", ">= 2.0.0.beta.8"

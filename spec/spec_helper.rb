@@ -35,7 +35,6 @@ Rspec.configure do |config|
     WebMock.stub_request(:post, 'localhost:3001')
   end
   config.before(:all) do
-
     Mongoid.master.collections.each(&:drop)
   end
 end

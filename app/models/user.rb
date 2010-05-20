@@ -5,7 +5,7 @@ class User
   field :login, :type => String
   field :following, :type => Array
   field :repo_watched, :type => Array
-  field :atom_feeds, :type => Array
+  field :atom_feeds, :type => Array, :default => []
 
   validates_presence_of :login
   validates_presence_of :github_login
@@ -14,8 +14,8 @@ class User
 
   validates_uniqueness_of :login
   validates_uniqueness_of :github_login
-  index :login, :unique => true
-  index :github_login, :unique => true
+  index :login#, :unique => true
+  index :github_login#, :unique => true
 
   devise :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
 
@@ -50,16 +50,20 @@ class User
   def fetch_following
     self.following = Octopussy.following(github_login)
     self.following.each {|f|
-      Coder.find_or_create_by(:login => f)
+      Coder.find_or_create_by(:login => f, :atom_url => "http://github.com/#{f}.atom")
     }
   end
 
   def fetch_repo_watched
     self.repo_watched = Octopussy.watched(github_login)
     self.repo_watched.each do |repo|
+      next unless repo.is_a?(Hash)
+      next unless repo.has_key?('url')
       re = Repository.find_or_initialize_by(:url => repo['url'])
       re.owner = repo['owner']
       re.name = repo['name']
+      # TODO: Add other branches
+      re.atom_url << File.join(repo['url'], '/commits/master.atom')
       re.save
     end
   end
@@ -76,7 +80,7 @@ class User
 
   def push_atom_feeds
     self.atom_feeds.each do |atom|
-      RestClient.post(AppConfig.pushme_host, :push => {:feed_url => atom, :feed_type => 'atom', :pusher => {:push_type => 'post_http', :options => {:url => File.join(AppConfig.host, '/atom/callback')}}})
+      Mygithub::Application::SUBSCRIBE_CHANNEL.push(atom)
     end
   end
 
