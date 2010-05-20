@@ -20,6 +20,16 @@ class Coder
         save!
       end
 
+      if entry.id =~ /WatchEvent:(\d+)/
+        github_id = $1
+        entry.title =~ /(.+) started watching (.+)/
+        events << WatchEvent.create(:github_id => github_id,
+                                   :published_at => entry.published,
+                                   :who => $1,
+                                   :what => $2)
+        save!
+      end
+
     end
     #PushEvent
     #WatchEvent
