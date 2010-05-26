@@ -1,4 +1,5 @@
 class Event
   include Mongoid::Document
-  belongs_to_related :from, :polymorphic => true
+  field :from_type, :type => String
+  field :from_id, :type => BSON::ObjectID
 end
